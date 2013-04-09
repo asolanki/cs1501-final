@@ -16,6 +16,6 @@ numberOfNeighbors :: Game -> (Int, Int) -> Int
 numberOfNeighbors = 
 
 surrounding :: Game -> (Int, Int) -> [Bool]
-surrounding g (x, y) = case (x, y) of
-	(0, 0) 		-> (board !! y) !! x)
+surrounding g (0, 0) = {- some fn -} ([1, 0], [0, 1], [1,1])
+surrounding g ()
 
