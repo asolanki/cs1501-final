@@ -5,6 +5,7 @@ import Data.List
 import System.IO
 import System.Environment
 import Text.Printf
+import Control.Monad
 
 -- |Cell type is given by a 2-tuple of integers (x, y)
 type Cell = (Int, Int)
@@ -37,7 +38,7 @@ step b = [c | (c,n) <- determineNeighbors b, alive (c,n)]
 display :: Board -> IO ()
 display board = do
   mapM_ (\x -> do
-    mapM_ (\y -> putChar $ if elem (x,y) board then 'O' else ' ') [-10..10]
+    mapM_ (\y -> putChar $ if elem (x,y) board then '#' else ' ') [-10..10]
     putChar '\n'
     ) [-10..10]
 
@@ -49,10 +50,16 @@ go board n = do
   getLine
   go (step board) (n+1)
 
+-- main function takes input text file and parses living cells
+--    format for input: newline separated cells in the form "x y"
 main = do
+  (filename:_) <- getArgs
+  fileLines <- liftM lines $ readFile $ filename
+  --let splitLines = map words fileLines
+  let tuples = (map (\(x:y:_) -> (read x, read y) ) (map words fileLines))
   putStrLn "Welcome to the Game of Life"
   putStrLn "Press return to begin, and to iterate through each step"
   getLine
-  go [(0,0), (0,1), (0,2), (1,2), (2,1)] 0
+  go tuples 0
 
 
